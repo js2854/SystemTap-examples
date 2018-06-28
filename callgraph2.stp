@@ -1,0 +1,16 @@
+#! /usr/bin/env stap
+/*
+ * callgraph2.stp
+ * usage: callgraph2.stp process func_name
+ */
+
+function trace(entry_p)
+{
+  printf("%s%s%s\n",
+         thread_indent (entry_p),
+         (entry_p>0?"->":"<-"),
+         ppfunc ())
+}
+
+probe process(@1).function(@2).call   { trace(2) }
+probe process(@1).function(@2).return { trace(-2) }
